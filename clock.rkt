@@ -4,11 +4,11 @@
 
 (define bitmap (read-bitmap "clocks/01/00.jpg"))
 
-;(define (is-pepe?)
-;  (if (> (random) 0.55) #t #f))
-(define (is-pepe?) #t)
+(define (is-pepe?)
+  (if (> (random) 0.85) #t #f))
+;(define (is-pepe?) #t)
 
-
+(define x -1)
 (define (get-current-year)
   (let ((date (seconds->date (current-seconds))))
     (date-year date)))
@@ -122,7 +122,36 @@
            (send f show #t))
          (begin
            (set! bitmap (read-bitmap (string-append "clocks/"
-                                                    (number->string  (get-current-base13-hour-12h))
+                                                    (number->string  (+ (get-current-base13-hour-12h) x))
+                                                    "/"
+                                                    (number->string  (get-current-base13-minute))
+                                                    ".jpg")))
+           (new message% [parent f] [label bitmap])
+           (send f show #t)))
+
+    
+    
+    (sleep 60)
+    (main)))
+
+(define (main2)
+  (begin
+    
+    
+    (send f show #f)
+    (set! f (new frame% [label "Clock"]
+                        [width 832]
+                        [height 576]))
+    (if  #t
+         (begin
+           (set! bitmap (read-bitmap (string-append "pepe/"
+                                                    (number->string (truncate (+ (* (random) 9) 1)))
+                                                    ".png")))
+           (new message% [parent f] [label bitmap])
+           (send f show #t))
+         (begin
+           (set! bitmap (read-bitmap (string-append "clocks/"
+                                                    (number->string  (+ (get-current-base13-hour-12h) x))
                                                     "/"
                                                     (number->string  (get-current-base13-minute))
                                                     ".jpg")))
@@ -132,11 +161,13 @@
     
     
     (sleep 1)
-    (main)))
+    (main2)))
+
+
 
 ;;; MAIN PROGRAM
 ;(main)
-(display (get-current-base13-hour-12h))
+(display (+ (get-current-base13-hour-12h) x))
 (display ":")
 (get-current-base13-minute)
 
